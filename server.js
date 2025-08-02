@@ -7,10 +7,16 @@ dotenv.config();
 connectDB();
 
 const app = express();
-app.use(cors({
-  origin: 'https://floralwhite-gull-520021.hostingersite.com', // your Hostinger domain
-  credentials: true
-}));
+
+app.use(
+  cors({
+    origin: [
+      'http://localhost:5173', // local dev
+      'https://floralwhite-gull-520021.hostingersite.com', // your frontend domain
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 app.use('/api/auth', require('./routes/authRoutes'));
@@ -19,6 +25,9 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/posts', require('./routes/postRoutes'));
 app.use('/api/users', require('./routes/userRoutes'));
 
+app.get('/', (req, res) => {
+  res.send('Backend is running ✅');
+});
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
